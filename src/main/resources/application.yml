@@ -1,0 +1,42 @@
+logging:
+  level:
+    root: info
+spring:
+  cloud:
+    stream:
+      function:
+        definition: enrich
+      bindings:
+        enrich-in-0:
+          destination: purchases
+        enrich-in-1:
+          destination: items
+          consumer:
+            materializedAs: item-store
+        enrich-out-0:
+          destination: transactions
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+          bindings:
+            enrich-in-1:
+              consumer:
+                materializedAs: item-store
+              configuration:
+                commit.interval.ms: 100
+  cache:
+    redis:
+      time-to-live: 1d
+  redis:
+    host: localhost
+    port: 6370
+  application:
+    name: enrich-application
+validators:
+  consent:
+    host: http://localhost:16001
+    endpoint: /user/{id}
+  collaborator:
+    host: http://localhost:16001
+    endpoint: /user/{id}
