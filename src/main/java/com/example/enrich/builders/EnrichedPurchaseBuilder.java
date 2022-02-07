@@ -21,7 +21,7 @@ public class EnrichedPurchaseBuilder {
     ) {
         final Purchase purchase = purchaseFullyEnriched.purchase();
         final Map<Long, Integer> newProperties = purchaseFullyEnriched.itemProperties();
-        final boolean isCollaborator = purchaseFullyEnriched.isCollaborator();
+        final boolean isCollaborator = purchaseFullyEnriched.isMember();
         final EnrichedTransaction enrichedTransaction =
                 EnrichedPurchaseBuilder.build(purchase.transaction(), newProperties);
         return new EnrichedPurchase(purchase.id(), purchase.memberUuid(), isCollaborator, purchase.source(),

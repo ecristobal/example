@@ -3,7 +3,7 @@ package com.example.enrich.streams.transformers;
 import com.example.enrich.messages.OneCatalogItem;
 import com.example.enrich.messages.Purchase;
 import com.example.enrich.messages.Purchase.Transaction.SaleItem;
-import com.example.enrich.messages.UnformattedEnrichedPurchase;
+import com.example.enrich.messages.PurchaseWithProperties;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,7 +15,7 @@ import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 
 import static java.util.stream.Collectors.toMap;
 
-public class PurchaseTransformer implements ValueTransformerWithKey<UUID, Purchase, UnformattedEnrichedPurchase> {
+public class PurchaseTransformer implements ValueTransformerWithKey<UUID, Purchase, PurchaseWithProperties> {
 
     private static final String ECO_LEVEL_TAG = "NEW_PROPERTY";
 
@@ -27,7 +27,7 @@ public class PurchaseTransformer implements ValueTransformerWithKey<UUID, Purcha
     }
 
     @Override
-    public UnformattedEnrichedPurchase transform(final UUID id, final Purchase purchase) {
+    public PurchaseWithProperties transform(final UUID id, final Purchase purchase) {
         final Map<Long, Integer> newProperties =
                 Stream.of(purchase.transaction().saleItems(), purchase.transaction().returnItems())
                       .flatMap(Collection::parallelStream)
@@ -48,7 +48,7 @@ public class PurchaseTransformer implements ValueTransformerWithKey<UUID, Purcha
                       })
                       .filter(entry -> entry.getValue() != Integer.MAX_VALUE)
                       .collect(toMap(Entry::getKey, Entry::getValue));
-        return new UnformattedEnrichedPurchase(purchase, newProperties);
+        return new PurchaseWithProperties(purchase, newProperties);
     }
 
     @Override

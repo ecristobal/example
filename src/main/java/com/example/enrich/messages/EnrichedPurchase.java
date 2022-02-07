@@ -11,7 +11,7 @@ import java.util.UUID;
 public record EnrichedPurchase(
         @JsonProperty("id") UUID id,
         @JsonProperty("member_uuid") UUID memberUuid,
-        @JsonProperty("is_collaborator") boolean isCollaborator,
+        @JsonProperty("is_member") boolean isMember,
         @JsonProperty("source") String source,
         @JsonProperty("operator") String operator,
         @JsonProperty("creation_data_time") ZonedDateTime creationDateTime,

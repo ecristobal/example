@@ -9,8 +9,8 @@ import com.example.enrich.streams.transformers.PurchaseTransformer;
 import com.example.enrich.validators.Validator;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,17 +18,17 @@ import org.springframework.context.annotation.Configuration;
 public class StreamConfiguration {
 
     @Bean
-    public BiFunction<KStream<UUID, Purchase>, KTable<Long, OneCatalogItem>, KStream<UUID, EnrichedPurchase>> enrich(
-            final Validator<UUID> consentValidator, final Validator<UUID> collaboratorValidator
+    public BiFunction<KStream<UUID, Purchase>, GlobalKTable<Long, OneCatalogItem>, KStream<UUID, EnrichedPurchase>> enrich(
+            final Validator<UUID> consentValidator, final Validator<UUID> memberValidator
     ) {
         //@formatter:off
         return (purchaseStream, catalogTable) -> purchaseStream
                 .filter((id, purchase) -> consentValidator.validate(purchase.memberUuid()))
-                .transformValues(() -> new PurchaseTransformer(), "item-store")
+                .transformValues(() -> new PurchaseTransformer())
                 .mapValues(unformattedEnrichedPurchase -> {
-                    final boolean isCollaborator = collaboratorValidator
+                    final boolean isMember = memberValidator
                             .validate(unformattedEnrichedPurchase.purchase().memberUuid());
-                    return new PurchaseFullyEnriched(unformattedEnrichedPurchase, isCollaborator);
+                    return new PurchaseFullyEnriched(unformattedEnrichedPurchase, isMember);
                 })
                 .mapValues(EnrichedPurchaseBuilder::build);
         //@formatter:on

@@ -36,7 +36,7 @@ spring:
 validators:
   consent:
     host: http://localhost:16001
-    endpoint: /user/{id}
-  collaborator:
+    endpoint: /consent/{id}
+  member:
     host: http://localhost:16001
-    endpoint: /user/{id}
+    endpoint: /member/{id}

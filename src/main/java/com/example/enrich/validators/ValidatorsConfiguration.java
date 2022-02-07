@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@EnableConfigurationProperties({CollaboratorValidatorProperties.class, ConsentValidatorProperties.class})
+@EnableConfigurationProperties({MemberValidatorProperties.class, ConsentValidatorProperties.class})
 public class ValidatorsConfiguration {
 
     @Bean
@@ -15,10 +15,10 @@ public class ValidatorsConfiguration {
     }
 
     @Bean
-    CollaboratorValidator collaboratorValidator(
-            final RestTemplate restTemplate, final CollaboratorValidatorProperties properties
+    MemberValidator memberValidator(
+            final RestTemplate restTemplate, final MemberValidatorProperties properties
     ) {
-        return new CollaboratorValidator(restTemplate, properties);
+        return new MemberValidator(restTemplate, properties);
     }
 
 }

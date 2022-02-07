@@ -31,6 +31,6 @@ validators:
   consent:
     host: http://localhost:16001
     endpoint: /consent/{id}
-  collaborator:
+  member:
     host: http://localhost:16001
-    endpoint: /collaborator/{id}
+    endpoint: /member/{id}

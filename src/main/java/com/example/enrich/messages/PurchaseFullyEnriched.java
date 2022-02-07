@@ -6,13 +6,13 @@ import java.util.Map;
 public record PurchaseFullyEnriched(
         Purchase purchase,
         Map<Long, Integer> itemProperties,
-        boolean isCollaborator
+        boolean isMember
 ) implements Serializable {
 
     public PurchaseFullyEnriched(
-            final UnformattedEnrichedPurchase unformattedEnrichedPurchase, final boolean isCollaborator
+            final PurchaseWithProperties purchaseWithProperties, final boolean isCollaborator
     ) {
-        this(unformattedEnrichedPurchase.purchase(), unformattedEnrichedPurchase.itemProperties(), isCollaborator);
+        this(purchaseWithProperties.purchase(), purchaseWithProperties.itemProperties(), isCollaborator);
     }
 
 }

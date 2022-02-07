@@ -6,21 +6,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.client.RestTemplate;
 
-class CollaboratorValidator implements Validator<UUID> {
+class MemberValidator implements Validator<UUID> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CollaboratorValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberValidator.class);
 
     private final RestTemplate restTemplate;
 
     private final String url;
 
-    public CollaboratorValidator(final RestTemplate restTemplate, final CollaboratorValidatorProperties properties) {
+    public MemberValidator(final RestTemplate restTemplate, final MemberValidatorProperties properties) {
         this.restTemplate = restTemplate;
         this.url = properties.host().concat(properties.endpoint());
     }
 
     @Override
-    @Cacheable("collaboratorCache")
+    @Cacheable("memberCache")
     public boolean validate(final UUID memberId) {
         return this.restTemplate.getForObject(this.url, Boolean.class, memberId);
     }
